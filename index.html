@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido a mi rincón de LoL</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Animación de fade in para la imagen del campeón */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1.5s ease forwards;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-purple-900 to-indigo-800 text-white font-sans">
+
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <!-- Imagen del campeón -->
+    <img src="tu_prota.png" alt="Raccord Prota" class="absolute bottom-0 right-10 w-1/3 animate-fadeIn">
+
+    <!-- Texto principal -->
+    <div class="text-center z-10 px-4">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">¡Bienvenido a mi rincón de LoL!</h1>
+      <p class="text-xl md:text-2xl">Conoce a <span class="text-yellow-400 font-semibold">Raccord</span>, mi campeón favorito</p>
+      <button class="mt-6 px-6 py-3 bg-yellow-500 rounded-lg hover:bg-yellow-600 transition duration-300">Explorar</button>
+    </div>
+
+    <!-- Partículas decorativas opcionales -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="w-2 h-2 bg-yellow-400 rounded-full absolute top-10 left-20 animate-bounce-slow"></div>
+      <div class="w-3 h-3 bg-purple-500 rounded-full absolute top-1/2 left-1/3 animate-bounce-slow"></div>
+      <div class="w-1 h-1 bg-pink-400 rounded-full absolute bottom-20 right-1/4 animate-bounce-slow"></div>
+    </div>
+  </section>
+
+  <!-- Sección de lore o stats del campeón -->
+  <section class="py-20 px-6 md:px-20 bg-gradient-to-t from-indigo-800 to-purple-900">
+    <h2 class="text-4xl font-bold mb-6 text-center">Sobre Raccord</h2>
+    <p class="text-lg md:text-xl text-center max-w-3xl mx-auto">
+      Raccord es un campeón legendario de League of Legends, conocido por su estilo único y habilidades impresionantes.
+      Aquí puedes mostrar sus habilidades, frases, skins o cualquier detalle que quieras destacar.
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 text-center bg-indigo-900">
+    <p>Mi web personal de League of Legends | <a href="#" class="text-yellow-400 hover:underline">Perfil de LoL</a></p>
+  </footer>
+
+  <!-- Animaciones adicionales con Tailwind -->
+  <script>
+    // Añadir clase animate-bounce-slow a las partículas
+    document.querySelectorAll('.animate-bounce-slow').forEach(el => {
+      el.style.animation = 'bounce 4s infinite ease-in-out';
+    });
+  </script>
+
+</body>
+</html>
