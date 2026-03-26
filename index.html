@@ -3,63 +3,475 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenido a mi rincón de LoL</title>
+  <!-- CORRECCIÓN: título y pequeñas mejoras -->
+  <title>Racord — Rincón cyberpunk de LoL</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuente estilo cyberpunk -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --neon-pink: #ff2d95;
+      --neon-cyan: #00e6ff;
+      --neon-purple: #9b59ff;
+      --glass: rgba(255,255,255,0.04);
+      /* Paleta adicional (acento tipo LoL) */
+      --lol-gold: #ffcc33;
+    }
+
+    /* Fondo estilo cyberpunk con grid sutil */
+    body{
+      font-family: 'Orbitron', system-ui, sans-serif;
+      background: radial-gradient(ellipse at 20% 10%, rgba(255,45,149,0.08), transparent 10%),
+                  radial-gradient(ellipse at 80% 90%, rgba(0,230,255,0.04), transparent 10%),
+                  linear-gradient(180deg,#0d0221 0%, #2a003a 50%, #000814 100%);
+      color: #e6f7ff;
+    }
+
+    /* Grid animado discreto */
+    .grid-overlay{
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px, 60px 60px;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: 0.6;
+      animation: gridMove 12s linear infinite;
+    }
+    @keyframes gridMove{
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 120px 120px, -120px -120px; }
+    }
+
     /* Animación de fade in para la imagen del campeón */
     @keyframes fadeIn {
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
     .animate-fadeIn {
-      animation: fadeIn 1.5s ease forwards;
+      animation: fadeIn 1.2s ease forwards;
     }
+
+    /* Efecto de texto neón */
+    .neon-text{
+      color: var(--neon-pink);
+      text-shadow: 0 0 8px rgba(255,45,149,0.6), 0 0 24px rgba(155,89,255,0.15), 0 0 48px rgba(0,230,255,0.05);
+    }
+
+    /* Botón neon */
+    .neon-btn{
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(90deg, rgba(255,45,149,0.08), rgba(0,230,255,0.03));
+      color: var(--neon-pink);
+      box-shadow: 0 6px 20px rgba(155,89,255,0.06), 0 0 18px rgba(255,45,149,0.12);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .neon-btn:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 10px 34px rgba(155,89,255,0.15), 0 0 36px rgba(255,45,149,0.25);
+      color: white;
+    }
+
+    /* Glitch ligero para el título */
+    .glitch{ position: relative; display: inline-block; }
+    .glitch::before, .glitch::after{
+      content: attr(data-text);
+      position: absolute; left: 0; top: 0;
+      width: 100%; overflow: hidden;
+      clip: rect(0,900px,0,0);
+    }
+    .glitch::before{
+      left: 2px; text-shadow: -2px 0 var(--neon-cyan);
+      animation: glitchTop 2.5s infinite linear alternate-reverse;
+    }
+    .glitch::after{
+      left: -2px; text-shadow: -2px 0 var(--neon-pink);
+      animation: glitchBottom 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitchTop{ 0%{clip:rect(0,900px,0,0)} 10%{clip:rect(10px,900px,40px,0)} 20%{clip:rect(50px,900px,80px,0)} 30%{clip:rect(0,900px,0,0)} }
+    @keyframes glitchBottom{ 0%{clip:rect(0,900px,0,0)} 15%{clip:rect(60px,900px,110px,0)} 25%{clip:rect(20px,900px,50px,0)} 35%{clip:rect(0,900px,0,0)} }
+
+    /* Partículas neon */
+    .particle{ filter: drop-shadow(0 0 8px rgba(255,45,149,0.35)); }
+
+    /* Ajustes responsive para imagen */
+    @media (max-width: 768px){
+      .hero-img{ width: 50% !important; right: 1rem !important; }
+      h1 { font-size: 2.2rem; }
+    }
+
+    /* Tarjeta de Historial de partidas (placeholder) */
+    .match-history {
+      position: absolute;
+      left: 1.5rem;
+      top: 4.5rem;
+      width: 220px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.05);
+      border-left: 2px solid rgba(255,45,149,0.18);
+      border-radius: 12px;
+      padding: 0.6rem;
+      color: #eaf6ff;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 18px rgba(255,45,149,0.06);
+      backdrop-filter: blur(6px);
+      z-index: 20;
+      font-size: 0.9rem;
+    }
+    .match-history h4 {
+      margin: 0 0 0.45rem 0;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--neon-pink);
+      text-shadow: 0 0 6px rgba(255,45,149,0.35);
+    }
+    .match-link {
+      display: inline-block;
+      width: 100%;
+      padding: 0.45rem 0.55rem;
+      background: rgba(0,0,0,0.18);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #dff9ff;
+      border: 1px dashed rgba(255,255,255,0.04);
+      font-size: 0.88rem;
+    }
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-top: 0.6rem;
+    }
+    .match-slot {
+      width: 100%;
+      padding-top: 100%; /* ratio square */
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(255,45,149,0.06), rgba(0,230,255,0.02));
+      border: 1px solid rgba(255,255,255,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .match-slot .inner {
+      position: absolute; inset: 0; display:flex; align-items:center; justify-content:center;
+      font-size: 0.65rem; color: rgba(255,255,255,0.85);
+      opacity: 0.9;
+    }
+
+    /* Topbar / HUD con marca RACORD */
+    .topbar{
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 50;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:6px 12px;
+      border-radius:10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 20px rgba(155,89,255,0.03);
+      backdrop-filter: blur(6px);
+      pointer-events: auto;
+    }
+    .brand-badge{
+      width:36px; height:36px; border-radius:8px;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+      box-shadow: 0 4px 18px rgba(255,45,149,0.18), 0 0 26px rgba(0,230,255,0.06);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; color:#050505; letter-spacing:0.6px;
+      font-size:0.85rem;
+      transform: translateZ(0);
+    }
+    .brand-name{
+      font-weight:800;
+      color: var(--lol-gold);
+      text-shadow: 0 0 8px rgba(255,204,51,0.16), 0 0 26px rgba(155,89,255,0.03);
+      font-size: 0.95rem;
+      letter-spacing: 1.6px;
+    }
+    .brand-sub{
+      font-size:0.65rem; color: rgba(230,247,255,0.75); margin-top:2px; letter-spacing:0.8px;
+    }
+    .topbar a{ color: inherit; text-decoration:none; }
+
+    /* Pequeño ajuste para que el hero deje espacio a la topbar en móvil */
+    @media (max-width:640px){
+      .match-history{ top:6.5rem; left:0.9rem; }
+    }
+
+    /* Animación de fade in para la imagen del campeón */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    /* Efecto de texto neón */
+    .neon-text{
+      color: var(--neon-pink);
+      text-shadow: 0 0 8px rgba(255,45,149,0.6), 0 0 24px rgba(155,89,255,0.15), 0 0 48px rgba(0,230,255,0.05);
+    }
+
+    /* Botón neon */
+    .neon-btn{
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(90deg, rgba(255,45,149,0.08), rgba(0,230,255,0.03));
+      color: var(--neon-pink);
+      box-shadow: 0 6px 20px rgba(155,89,255,0.06), 0 0 18px rgba(255,45,149,0.12);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .neon-btn:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 10px 34px rgba(155,89,255,0.15), 0 0 36px rgba(255,45,149,0.25);
+      color: white;
+    }
+
+    /* Glitch ligero para el título */
+    .glitch{ position: relative; display: inline-block; }
+    .glitch::before, .glitch::after{
+      content: attr(data-text);
+      position: absolute; left: 0; top: 0;
+      width: 100%; overflow: hidden;
+      clip: rect(0,900px,0,0);
+    }
+    .glitch::before{
+      left: 2px; text-shadow: -2px 0 var(--neon-cyan);
+      animation: glitchTop 2.5s infinite linear alternate-reverse;
+    }
+    .glitch::after{
+      left: -2px; text-shadow: -2px 0 var(--neon-pink);
+      animation: glitchBottom 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitchTop{ 0%{clip:rect(0,900px,0,0)} 10%{clip:rect(10px,900px,40px,0)} 20%{clip:rect(50px,900px,80px,0)} 30%{clip:rect(0,900px,0,0)} }
+    @keyframes glitchBottom{ 0%{clip:rect(0,900px,0,0)} 15%{clip:rect(60px,900px,110px,0)} 25%{clip:rect(20px,900px,50px,0)} 35%{clip:rect(0,900px,0,0)} }
+
+    /* Partículas neon */
+    .particle{ filter: drop-shadow(0 0 8px rgba(255,45,149,0.35)); }
+
+    /* Ajustes responsive para imagen */
+    @media (max-width: 768px){
+      .hero-img{ width: 50% !important; right: 1rem !important; }
+      h1 { font-size: 2.2rem; }
+    }
+
+    /* Tarjeta de Historial de partidas (placeholder) */
+    .match-history {
+      position: absolute;
+      left: 1.5rem;
+      top: 4.5rem;
+      width: 220px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.05);
+      border-left: 2px solid rgba(255,45,149,0.18);
+      border-radius: 12px;
+      padding: 0.6rem;
+      color: #eaf6ff;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 18px rgba(255,45,149,0.06);
+      backdrop-filter: blur(6px);
+      z-index: 20;
+      font-size: 0.9rem;
+    }
+    .match-history h4 {
+      margin: 0 0 0.45rem 0;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--neon-pink);
+      text-shadow: 0 0 6px rgba(255,45,149,0.35);
+    }
+    .match-link {
+      display: inline-block;
+      width: 100%;
+      padding: 0.45rem 0.55rem;
+      background: rgba(0,0,0,0.18);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #dff9ff;
+      border: 1px dashed rgba(255,255,255,0.04);
+      font-size: 0.88rem;
+    }
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-top: 0.6rem;
+    }
+    .match-slot {
+      width: 100%;
+      padding-top: 100%; /* ratio square */
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(255,45,149,0.06), rgba(0,230,255,0.02));
+      border: 1px solid rgba(255,255,255,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .match-slot .inner {
+      position: absolute; inset: 0; display:flex; align-items:center; justify-content:center;
+      font-size: 0.65rem; color: rgba(255,255,255,0.85);
+      opacity: 0.9;
+    }
+
+    /* Topbar / HUD con marca RACORD */
+    .topbar{
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 50;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:6px 12px;
+      border-radius:10px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 20px rgba(155,89,255,0.03);
+      backdrop-filter: blur(6px);
+      pointer-events: auto;
+    }
+    .brand-badge{
+      width:36px; height:36px; border-radius:8px;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+      box-shadow: 0 4px 18px rgba(255,45,149,0.18), 0 0 26px rgba(0,230,255,0.06);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; color:#050505; letter-spacing:0.6px;
+      font-size:0.85rem;
+      transform: translateZ(0);
+    }
+    .brand-name{
+      font-weight:800;
+      color: var(--lol-gold);
+      text-shadow: 0 0 8px rgba(255,204,51,0.16), 0 0 26px rgba(155,89,255,0.03);
+      font-size: 0.95rem;
+      letter-spacing: 1.6px;
+    }
+    .brand-sub{
+      font-size:0.65rem; color: rgba(230,247,255,0.75); margin-top:2px; letter-spacing:0.8px;
+    }
+    .topbar a{ color: inherit; text-decoration:none; }
+
+    /* Pequeño ajuste para que el hero deje espacio a la topbar en móvil */
+    @media (max-width:640px){
+      .match-history{ top:6.5rem; left:0.9rem; }
+    }
+
   </style>
 </head>
-<body class="bg-gradient-to-b from-purple-900 to-indigo-800 text-white font-sans">
+<body class="relative overflow-hidden">
+
+  <!-- Topbar HUD con marca -->
+  <div class="topbar" role="banner" aria-label="Racord HUD">
+    <div class="brand-badge" aria-hidden="true">R</div>
+    <div style="display:flex;flex-direction:column;line-height:1;">
+      <div class="brand-name">RACORD</div>
+      <div class="brand-sub">Rincón cyberpunk</div>
+    </div>
+  </div>
+
+  <!-- Fondo grid overlay -->
+  <div class="grid-overlay" aria-hidden="true"></div>
 
   <!-- Hero Section -->
   <section class="relative h-screen flex items-center justify-center overflow-hidden">
-    <!-- Imagen del campeón -->
-    <img src="tu_prota.png" alt="Raccord Prota" class="absolute bottom-0 right-10 w-1/3 animate-fadeIn">
+
+    <!-- -->
+    <!-- Agregar tarjeta de Historial de Partidas (placeholder) -->
+    <div class="match-history" id="match-history" aria-label="Historial de partidas">
+      <h4>Historial de partidas</h4>
+      <!-- Reemplaza href con el enlace a tu historial (por ejemplo perfil de op.gg o tu endpoint) -->
+      <a id="match-history-link" class="match-link" href="#" target="_blank" rel="noopener noreferrer">Agregar enlace</a>
+
+      <!-- Cuadritos representativos (vacíos) para mostrar últimas partidas -->
+      <div class="match-grid" aria-hidden="true">
+        <div class="match-slot"><div class="inner">—</div></div>
+        <div class="match-slot"><div class="inner">—</div></div>
+        <div class="match-slot"><div class="inner">—</div></div>
+        <div class="match-slot"><div class="inner">—</div></div>
+        <div class="match-slot"><div class="inner">—</div></div>
+      </div>
+    </div>
+    <!-- -->
 
     <!-- Texto principal -->
     <div class="text-center z-10 px-4">
-      <h1 class="text-5xl md:text-6xl font-bold mb-4">¡Bienvenido a mi rincón de LoL!</h1>
-      <p class="text-xl md:text-2xl">Conoce a <span class="text-yellow-400 font-semibold">Raccord</span>, mi campeón favorito</p>
-      <button class="mt-6 px-6 py-3 bg-yellow-500 rounded-lg hover:bg-yellow-600 transition duration-300">Explorar</button>
+      <h1 class="text-5xl md:text-6xl font-bold mb-4 neon-text">
+        <span class="glitch" data-text="¡Bienvenido al rincón cyberpunk de Racord!">¡Bienvenido al rincón cyberpunk de Racord!</span>
+      </h1>
+      <p class="text-xl md:text-2xl">Conoce a <span class="text-cyan-300 font-semibold neon-text">Racord</span>, mi campeón favorito en clave cyberpunk</p>
+      <button class="mt-6 px-6 py-3 rounded-lg neon-btn">Explorar</button>
     </div>
 
     <!-- Partículas decorativas opcionales -->
     <div class="absolute inset-0 pointer-events-none">
-      <div class="w-2 h-2 bg-yellow-400 rounded-full absolute top-10 left-20 animate-bounce-slow"></div>
-      <div class="w-3 h-3 bg-purple-500 rounded-full absolute top-1/2 left-1/3 animate-bounce-slow"></div>
-      <div class="w-1 h-1 bg-pink-400 rounded-full absolute bottom-20 right-1/4 animate-bounce-slow"></div>
+      <div class="w-2 h-2 bg-[color:var(--neon-pink)] rounded-full absolute top-10 left-20 particle" style="animation: float 6s ease-in-out infinite;"></div>
+      <div class="w-3 h-3 bg-[color:var(--neon-purple)] rounded-full absolute top-1/2 left-1/3 particle" style="animation: float 8s ease-in-out infinite;"></div>
+      <div class="w-1 h-1 bg-[color:var(--neon-cyan)] rounded-full absolute bottom-20 right-1/4 particle" style="animation: float 5s ease-in-out infinite;"></div>
     </div>
   </section>
 
   <!-- Sección de lore o stats del campeón -->
-  <section class="py-20 px-6 md:px-20 bg-gradient-to-t from-indigo-800 to-purple-900">
-    <h2 class="text-4xl font-bold mb-6 text-center">Sobre Raccord</h2>
+  <section class="py-20 px-6 md:px-20" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);">
+    <h2 class="text-4xl font-bold mb-6 text-center neon-text">Sobre Racord</h2>
     <p class="text-lg md:text-xl text-center max-w-3xl mx-auto">
-      Raccord es un campeón legendario de League of Legends, conocido por su estilo único y habilidades impresionantes.
-      Aquí puedes mostrar sus habilidades, frases, skins o cualquier detalle que quieras destacar.
+      Racord es un campeón legendario de League of Legends reimaginado en un mundo cyberpunk: implantes lumínicos,
+      habilidades potenciadas por nanotecnología y una estética de neón y metales pulidos. Aquí puedes mostrar sus
+      habilidades, frases, skins o cualquier detalle que quieras destacar.
     </p>
+
+    <!-- Card ejemplo estilo glass -->
+    <div class="mt-12 max-w-4xl mx-auto grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-2xl" style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); backdrop-filter: blur(6px);">
+        <h3 class="font-semibold text-xl neon-text">Habilidad Q</h3>
+        <p class="text-sm mt-2">Proyectiles energéticos que rebotan entre objetivos cercanos.</p>
+      </div>
+      <div class="p-6 rounded-2xl" style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); backdrop-filter: blur(6px);">
+        <h3 class="font-semibold text-xl neon-text">Habilidad W</h3>
+        <p class="text-sm mt-2">Campo de distorsión que ralentiza a los enemigos y potencia aliados.</p>
+      </div>
+      <div class="p-6 rounded-2xl" style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); backdrop-filter: blur(6px);">
+        <h3 class="font-semibold text-xl neon-text">Habilidad R</h3>
+        <p class="text-sm mt-2">Sobrecarga que desata una lluvia de pulsos eléctricos sobre el campo de batalla.</p>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-6 text-center bg-indigo-900">
-    <p>Mi web personal de League of Legends | <a href="#" class="text-yellow-400 hover:underline">Perfil de LoL</a></p>
+  <footer class="py-6 text-center" style="background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.4));">
+    <p>Mi web personal de League of Legends | <a href="#" class="text-[color:var(--neon-pink)] hover:underline">Perfil de LoL</a></p>
   </footer>
 
   <!-- Animaciones adicionales con Tailwind -->
   <script>
-    // Añadir clase animate-bounce-slow a las partículas
-    document.querySelectorAll('.animate-bounce-slow').forEach(el => {
-      el.style.animation = 'bounce 4s infinite ease-in-out';
+    // Añadir movimiento sutil a partículas
+    document.querySelectorAll('.particle').forEach((el, i) => {
+      el.style.setProperty('animation', `float ${5 + (i%3)*1.5}s ease-in-out ${i*0.2}s infinite`);
     });
+
+    // Fallback: animación CSS para float
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes float { 0%{ transform: translateY(0) } 50%{ transform: translateY(-12px) } 100%{ transform: translateY(0) } }`;
+    document.head.appendChild(style);
+
+    // Facilita poner el enlace del historial desde HTML: añade data-href al a#match-history-link
+    (function(){
+      const link = document.getElementById('match-history-link');
+      if(link && link.dataset && link.dataset.href && link.dataset.href !== '#'){
+        link.href = link.dataset.href;
+        link.textContent = 'Ver historial';
+      }
+      // Ejemplo: para activar manualmente desde consola -> document.getElementById('match-history-link').dataset.href = 'https://tuperfil.example'; location.reload();
+    })();
   </script>
+
+  <!-- SVG del campeón inline -->
+  <div class="absolute bottom-0 right-10 w-1/3 max-w-xs animate-fadeIn" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-full">
+      <path d="M12 2L2 7l10 5 10-5-10-5zm0 20l10-5-10-5-10 5 10 5z"/>
+      <path d="M2 12l10 5 10-5M2 7l10 5 10-5M2 17l10-5 10 5"/>
+    </svg>
+  </div>
 
 </body>
 </html>
+
